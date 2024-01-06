@@ -3,8 +3,8 @@ const Schema = mongoose.Schema;
 
 const categoryTagSchema = new Schema({
     tagName: { type: String, trim: true, required: true, unique: true },
-    userID: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
-    itemTagID: { type: mongoose.Schema.Types.ObjectId, ref: "itemTag" },
+    userID: { type: Schema.Types.ObjectId, ref: "user" },
+    itemTagID: { type: Schema.Types.ObjectId, ref: "itemTag" },
 });
 
 module.exports = mongoose.model("categoryTag", categoryTagSchema);

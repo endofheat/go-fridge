@@ -1,4 +1,4 @@
-require('dotev').config();
+require('dotenv').config();
 const jwt = require('jsonwebtoken');
 
 const verifyToken = (req, res, next) => {

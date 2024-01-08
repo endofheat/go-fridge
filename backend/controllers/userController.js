@@ -42,7 +42,7 @@ const registerUser = async (req, res) => {
     }
 
     // Validate if user exists in database
-    const oldUser = await Models.User.findOne({ where: { email } });
+    const oldUser = await Models.User.findOne({ email: { email } });
 
     if (oldUser) {
         res.send({ result: "User already exists. Please login" }); // code 409, 'Conflict'
@@ -60,21 +60,21 @@ const registerUser = async (req, res) => {
     let encryptedPassword = await bcrypt.hash(password, 10);
 
     // Create user in database
-    const userMetadata = await Models.User.create({
+    const newUser = new Models.User({
         userName,
         email: email.toLowerCase(), // sanitize: convert email to lowercase
         password: encryptedPassword,
     });
-    const user = userMetadata.get({ plain: true }); // get just the user fields, no extra sequelize metadata
+    const savedUser = await newItem.save(); // get just the user fields, no extra sequelize metadata
 
     // Create token
-    const token = createToken(user.id, email);
+    const token = createToken(savedUser.id, email);
 
     // save user token to send back to front-end
-    user.token = token;
+    savedUser.token = token;
 
     // return new user
-    res.send({ result: "User successfully registered", data: user });
+    res.send({ result: "User successfully registered", data: savedUser });
     } catch (err) {
     console.log(err);
     res.send({ result: 500, error: err.message })

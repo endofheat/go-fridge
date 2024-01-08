@@ -1,11 +1,11 @@
 'use strict';
 
-const Models = require('../models');
+let Models = require('../models');
 
 const getItems = (res) => {
     // get all items from database
-    Models.Item.findAll({})
-    .then(function (data) {
+    Models.Item.find({})
+    .then((data) => {
         res.send({result: 200, data: data })
     })
     .catch((err) => {
@@ -19,8 +19,8 @@ const getItemByName = (req, res) => {
     let startLetter = req.query.letter;
     Models.Item.find({})
     .then((data) => {
-        let nameMatchedItems = data.data.filter(
-            char => char.itemName.toUpperCase().starsWith(startLetter.toUpperCase()) // use toUpperCase() to get exact match
+        let nameMatchedItems = data.filter(
+            item => item.itemName.toUpperCase().starsWith(startLetter.toUpperCase()) // use toUpperCase() to get exact match
             )
         res.send({ result: 200, data: nameMatchedItems })
     })
@@ -46,54 +46,50 @@ const addItem = async (req, res) => {
         const { itemName, quantity, unit, expireDate } = req.body;
         // Validate Item input
         if (!(itemName && quantity && unit && expireDate)) {
-            res.status(400).json({ result: "All input is required" }); // code 400, 'Bad Request'
-        return; // when sending responses and finishing early, manually return or end the function to stop further processing
-    }
+            res.send({ result: "All input is required" }); // code 400, 'Bad Request'
+            return; // when sending responses and finishing early, manually return or end the function to stop further processing
+        }
 
     // Validate if Item exists in database
-    const oldItem = await Models.Item.findOne({ where: { itemName } });
+    const oldItem = await Models.Item.findOne({ itemName: { itemName } });
 
     if (oldItem) {
-        res.status(409).json({ result: "Item already exists. " }); // code 409, 'Conflict'
+        res.send({ result: "Item already exists. " }); // code 409, 'Conflict'
         return;
     }
 
     // Create Item in database
-    const ItemMetadata = await Models.Item.create({
+    const newItem = new Models.Item({
         itemName,
         quantity,
         unit,
         expireDate,
     });
-    const Item = ItemMetadata.get({ plain: true }); // get just the Item fields, no extra sequelize metadata
+    const savedItem = await newItem.save(); // get just the Item fields, no extra sequelize metadata
 
     // return new Item
-    res.status(201).json({ result: "Item successfully added", data: Item });
+    res.send({ result: "Item successfully added", data: savedItem });
     } catch (err) {
     console.log(err);
-    res.status(500).json({ result: err.message });
+    res.send({ result: err.message });
     }
 };
 
 const updateItem = (req, res) => {
-    Models.Item.update(req.body, {
-        where: {
-            id: req.params.id
-        }
-    }).then(function (data) {
-        res.status(200).json({result: 'Item updated successfully', data: data })
-    }).catch(err => {
-        res.status(500).json({ result: err.message })
+    Models.Item.findByIdAndUpdate(req.params.id, req.body, {new: true} 
+        ).then((data) => {
+        res.send({result: 'Item updated successfully', data: data })
+        }).catch(err => {
+        res.send({ result: err.message })
     })
 }
 
 const deleteItem = (req, res) => {
-    Models.Item.destroy({
-        where: { id: req.params.id }
-    }).then(function (data) {
-        res.status(200).json({ result: 'Item deleted successfully', data: data })
+    Models.Item.findByIdAndDelete(req.params.id
+    ).then((data) => {
+        res.send({ result: 'Item deleted successfully', data: data })
     }).catch(err => {
-        res.status(500).json({ result: err.message })
+        res.send({ result: err.message })
     })
 }
 

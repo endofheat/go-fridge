@@ -42,7 +42,7 @@ const registerUser = async (req, res) => {
     }
 
     // Validate if user exists in database
-    const oldUser = await Models.User.findOne({ email: { email } });
+    const oldUser = await Models.User.findOne({ email: email }).lean();
 
     if (oldUser) {
         res.send({ result: "User already exists. Please login" }); // code 409, 'Conflict'

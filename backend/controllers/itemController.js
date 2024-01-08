@@ -1,4 +1,4 @@
-'user strict';
+'use strict';
 
 const Models = require('../models');
 
@@ -41,57 +41,67 @@ const getItemByName = (req, res) => {
 //     })
 // }
 
-const registerItem = async (req, res) => {
+const addItem = async (req, res) => {
     try {
-        const { ItemName, email, password } = req.body;
+        const { itemName, quantity, unit, expireDate } = req.body;
         // Validate Item input
-        if (!(email && password && ItemName)) {
+        if (!(itemName && quantity && unit && expireDate)) {
             res.status(400).json({ result: "All input is required" }); // code 400, 'Bad Request'
         return; // when sending responses and finishing early, manually return or end the function to stop further processing
     }
 
     // Validate if Item exists in database
-    const oldItem = await Models.Item.findOne({ where: { email } });
+    const oldItem = await Models.Item.findOne({ where: { itemName } });
 
     if (oldItem) {
-        res.status(409).json({ result: "Item already exists. Please login" }); // code 409, 'Conflict'
-        return; // when sending responses and finishing early, manually return or end the function to stop further processing
-    }
-    // Verify email using Kickbox
-    const kickboxResponse = await kickbox.verify(email);
-
-    if (!kickboxResponse.success || kickboxResponse.result === "undeliverable" || kickboxResponse.disposable) {
-        res.status(400).json({ result: "Invalid email address" });
+        res.status(409).json({ result: "Item already exists. " }); // code 409, 'Conflict'
         return;
     }
-
-    // Encrypt Item password
-    let encryptedPassword = await bcrypt.hash(password, 10);
 
     // Create Item in database
     const ItemMetadata = await Models.Item.create({
         itemName,
-        quantity, // sanitize: convert email to lowercase
-        password: encryptedPassword,
+        quantity,
+        unit,
+        expireDate,
     });
     const Item = ItemMetadata.get({ plain: true }); // get just the Item fields, no extra sequelize metadata
 
-    // Create token
-    const token = createToken(Item.id, email);
-
-    // save Item token to send back to front-end
-    Item.token = token;
-
     // return new Item
-    res.status(201).json({ result: "Item successfully registered", data: Item });
+    res.status(201).json({ result: "Item successfully added", data: Item });
     } catch (err) {
     console.log(err);
     res.status(500).json({ result: err.message });
     }
 };
 
+const updateItem = (req, res) => {
+    Models.Item.update(req.body, {
+        where: {
+            id: req.params.id
+        }
+    }).then(function (data) {
+        res.status(200).json({result: 'Item updated successfully', data: data })
+    }).catch(err => {
+        res.status(500).json({ result: err.message })
+    })
+}
+
+const deleteItem = (req, res) => {
+    Models.Item.destroy({
+        where: { id: req.params.id }
+    }).then(function (data) {
+        res.status(200).json({ result: 'Item deleted successfully', data: data })
+    }).catch(err => {
+        res.status(500).json({ result: err.message })
+    })
+}
+
 module.exports = {
     getItems,
     getItemByName,
     // getItemByTag,
+    addItem,
+    updateItem,
+    deleteItem,
 }

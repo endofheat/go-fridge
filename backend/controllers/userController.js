@@ -1,14 +1,15 @@
 "use strict";
 
-const Models = require("../models");
+let Models = require("../models");
+const { param } = require('../routes/userRoutes');
 const bcrypt = require("bcryptjs");
 const { createToken } = require("../middleware/auth");
 const kickbox = require("kickbox").client(process.env.KICKBOX_API_KEY).kickbox();
 
 const getUsers = (res) => {
     // get all users from database
-    Models.User.findAll({})
-    .then(function (data) {
+    Models.User.find({})
+    .then((data) => {
         res.send({ result: 200, data: data });
     })
     // catch error, shows error message
@@ -20,8 +21,8 @@ const getUsers = (res) => {
 
 const getUserByID = (req, res) => {
     // get user by userID from database
-    Models.User.findAll({ where: { id: req.params.id } })
-    .then(function (data) {
+    Models.User.findOne({ _id: req.params.id })
+    .then((data) => {
         res.send({ result: 200, data: data });
     })
     // catch error, shows error message
@@ -36,7 +37,7 @@ const registerUser = async (req, res) => {
         const { userName, email, password } = req.body;
         // Validate user input
         if (!(email && password && userName)) {
-            res.status(400).json({ result: "All input is required" }); // code 400, 'Bad Request'
+            res.send({ result: "All input is required" }); // code 400, 'Bad Request'
         return; // when sending responses and finishing early, manually return or end the function to stop further processing
     }
 
@@ -44,14 +45,14 @@ const registerUser = async (req, res) => {
     const oldUser = await Models.User.findOne({ where: { email } });
 
     if (oldUser) {
-        res.status(409).json({ result: "User already exists. Please login" }); // code 409, 'Conflict'
+        res.send({ result: "User already exists. Please login" }); // code 409, 'Conflict'
         return; // when sending responses and finishing early, manually return or end the function to stop further processing
     }
     // Verify email using Kickbox
     const kickboxResponse = await kickbox.verify(email);
 
     if (!kickboxResponse.success || kickboxResponse.result === "undeliverable" || kickboxResponse.disposable) {
-        res.status(400).json({ result: "Invalid email address" });
+        res.send({ result: "Invalid email address" });
         return;
     }
 
@@ -73,40 +74,28 @@ const registerUser = async (req, res) => {
     user.token = token;
 
     // return new user
-    res.status(201).json({ result: "User successfully registered", data: user });
+    res.send({ result: "User successfully registered", data: user });
     } catch (err) {
     console.log(err);
-    res.status(500).json({ result: err.message });
+    res.send({ result: 500, error: err.message })
     }
 };
 
-// const createUser = (data, res) => {
-//     Models.User.create(data).then(function (data) {
-//         res.status(200).json({ result: 'User created successfully', data: data })
-//     }).catch(err => {
-//         res.status(500).json({ result: err.message })
-//     })
-// }
-
 const updateUser = (req, res) => {
-    Models.User.update(req.body, {
-        where: {
-            id: req.params.id
-        }
-    }).then(function (data) {
-        res.status(200).json({ result: 'User updated successfully', data: data })
+    Models.User.findByIdAndUpdate(req.params.id, req.body, { new: true }
+    ).then((data) => {
+        res.send({ result: 'User updated successfully', data: data })
     }).catch(err => {
-        res.status(500).json({ result: err.message })
+        res.send({ result: 500, error: err.message })
     })
 }
 
 const deleteUser = (req, res) => {
-    Models.User.destroy({
-        where: { id: req.params.id }
-    }).then(function (data) {
+    Models.User.findByIdAndDelete(req.params.id
+    ).then(function (data) {
         res.status(200).json({ result: 'User deleted successfully', data: data })
     }).catch(err => {
-        res.status(500).json({ result: err.message })
+        res.send({ result: 500, error: err.message })
     })
 }
 
@@ -118,11 +107,11 @@ const loginUser = async (req, res) => {
 
         // Validate user input
         if (!(email && password)) {
-            res.status(400).json({ result: "All input is required" });
+            res.send({ result: "All input is required" });
             return; // when sending responses and finishing early, manually return or end the function to stop further processing
         }
         // Validate if user exists in our database
-        const user = await Models.User.findOne({ raw: true, where: { email: email }});
+        const user = await Models.User.findOne({ email: email }).lean();
 
         // if they do exist, make sure their password matches - need to check encrypted version of password
         if (user && (await bcrypt.compare(password, user.password))) {
@@ -134,12 +123,12 @@ const loginUser = async (req, res) => {
             console.log(user)
 
             // send back logged in user details including token
-            res.status(200).json({ result: 'User successfully logged in', data: user });
+            res.send({ result: 'User successfully logged in', data: user });
         }
-        else res.status(400).json({ result: "Invalid user credentials" });
+        else res.send({ result: "Invalid user credentials" });
     } catch (err) {
         console.log(err);
-        res.status(500).json({ result: err.message })
+        res.send({ result: 500, error: err.message })
     }
 }
 
@@ -147,7 +136,6 @@ module.exports = {
     getUsers,
     getUserByID,
     registerUser,
-    // createUser,
     updateUser,
     deleteUser,
     loginUser,

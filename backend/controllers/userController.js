@@ -33,6 +33,7 @@ const getUserByID = (req, res) => {
 };
 
 const registerUser = async (req, res) => {
+    console.log(req.body);
     try {
         const { userName, email, password } = req.body;
         // Validate user input
@@ -48,14 +49,14 @@ const registerUser = async (req, res) => {
         res.status(409).json({ result: "User already exists. Please login" }); // code 409, 'Conflict'
         return; // when sending responses and finishing early, manually return or end the function to stop further processing
     }
-    // Verify email using Kickbox
+/*     // Verify email using Kickbox
     const kickboxResponse = await kickbox.verify(email);
 
     if (!kickboxResponse.success || kickboxResponse.result === "undeliverable" || kickboxResponse.disposable) {
         res.status(400).json({ result: "Invalid email address" });
         return;
     }
-
+ */
     // Encrypt user password
     let encryptedPassword = await bcrypt.hash(password, 10);
 

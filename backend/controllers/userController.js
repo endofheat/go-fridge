@@ -4,6 +4,7 @@ let Models = require("../models");
 const { param } = require('../routes/userRoutes');
 const bcrypt = require("bcryptjs");
 const { createToken } = require("../middleware/auth");
+const { Model } = require("mongoose");
 const kickbox = require("kickbox").client(process.env.KICKBOX_API_KEY).kickbox();
 
 const getUsers = (res) => {
@@ -92,7 +93,7 @@ const updateUser = (req, res) => {
 
 const deleteUser = (req, res) => {
     Models.User.findByIdAndDelete(req.params.id
-    ).then(function (data) {
+    ).then((data) => {
         res.status(200).json({ result: 'User deleted successfully', data: data })
     }).catch(err => {
         res.send({ result: 500, error: err.message })
@@ -132,6 +133,20 @@ const loginUser = async (req, res) => {
     }
 }
 
+const getUserFridge = (req, res) => {
+    // finds fridge for a given user
+    Model.User.Find({ fridgeID: req.params.uid })
+    .populate({path: 'fridgeID'})
+    .then((data) => {
+        res.send({ result: 200, data: data });
+    })
+    // catch error, shows error message
+    .catch((err) => {
+        console.log(err);
+        res.send({ result: 500, data: err.message });
+    });
+}
+
 module.exports = {
     getUsers,
     getUserByID,
@@ -139,4 +154,5 @@ module.exports = {
     updateUser,
     deleteUser,
     loginUser,
+    getUserFridge,
 };

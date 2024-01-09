@@ -66,7 +66,7 @@ const registerUser = async (req, res) => {
         email: email.toLowerCase(), // sanitize: convert email to lowercase
         password: encryptedPassword,
     });
-    const savedUser = await newItem.save(); // get just the user fields, no extra sequelize metadata
+    const savedUser = await newUser.save(); // get just the user fields, no extra sequelize metadata
 
     // Create token
     const token = createToken(savedUser.id, email);

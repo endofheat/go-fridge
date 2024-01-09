@@ -1,6 +1,18 @@
 "use strict";
 let Models = require("../models");
 
+const getFridgeItem = (res) => {
+    // get all items from database
+    Models.FridgeItem.find({})
+    .then((data) => {
+        res.send({result: 200, data: data })
+    })
+    .catch((err) => {
+        console.log(err);
+        res.status(500).send({ result: "Internal Server Error", data: err.message });
+    })
+}
+
 const getAllFridgeItems = (res) => {
     // get all items assigned for list
     Models.FridgeItem.find({ itemID: req.params.id })
@@ -49,6 +61,7 @@ const deleteFridgeItem = (req, res) => {
 }
 
 module.exports = {
+    getFridgeItem,
     getAllFridgeItems,
     createFridgeItem,
     updateFridgeItem,

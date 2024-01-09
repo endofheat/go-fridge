@@ -6,6 +6,7 @@ let { verifyToken } = require("../middleware/auth");
 // GET all users
 router.get('/', verifyToken, (req, res) => { // uses authentication middleware function to verify the user token before controller function runs
     Controllers.getUsers(res);
+    // if note login, will shows: A token is required for authentication
 })
 
 // POST login user

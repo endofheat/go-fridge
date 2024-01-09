@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
 
 // POST add a new tag
 router.post('/create', (req, res) => {
-    Controllers.addTag(req.body, res);
+    Controllers.addTag(req, res);
 });
 
 // PUT update a tag

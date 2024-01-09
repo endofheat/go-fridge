@@ -4,7 +4,7 @@ let Controllers = require("../controllers/itemTagController");
 
 // GET items assigned to the ItemTag list
 router.get('/', (req, res) => {
-    Controllers.getAllItemTags(res);
+    Controllers.getItemTags(res);
 });
 
 router.get('/:id', (req, res) => {

@@ -37,7 +37,7 @@ const registerUser = async (req, res) => {
         const { userName, email, password } = req.body;
         // Validate user input
         if (!(email && password && userName)) {
-            res.send({ result: "All input is required" }); // code 400, 'Bad Request'
+            res.status(400).json({ result: "All input is required" }); // code 400, 'Bad Request'
         return; // when sending responses and finishing early, manually return or end the function to stop further processing
     }
 
@@ -45,14 +45,14 @@ const registerUser = async (req, res) => {
     const oldUser = await Models.User.findOne({ email: email }).lean();
 
     if (oldUser) {
-        res.send({ result: "User already exists. Please login" }); // code 409, 'Conflict'
+        res.status(409).json({ result: "User already exists. Please login" }); // code 409, 'Conflict'
         return; // when sending responses and finishing early, manually return or end the function to stop further processing
     }
     // Verify email using Kickbox
     const kickboxResponse = await kickbox.verify(email);
 
     if (!kickboxResponse.success || kickboxResponse.result === "undeliverable" || kickboxResponse.disposable) {
-        res.send({ result: "Invalid email address" });
+        res.status(400).json({ result: "Invalid email address" });
         return;
     }
 
@@ -74,7 +74,7 @@ const registerUser = async (req, res) => {
     savedUser.token = token;
 
     // return new user
-    res.send({ result: "User successfully registered", data: savedUser });
+    res.status(201).json({ result: "User successfully registered", data: savedUser });
     } catch (err) {
     console.log(err);
     res.send({ result: 500, error: err.message })
@@ -84,7 +84,7 @@ const registerUser = async (req, res) => {
 const updateUser = (req, res) => {
     Models.User.findByIdAndUpdate(req.params.id, req.body, { new: true }
     ).then((data) => {
-        res.send({ result: 'User updated successfully', data: data })
+        res.status(202).json({ result: 'User updated successfully', data: data })
     }).catch(err => {
         res.send({ result: 500, error: err.message })
     })
@@ -107,7 +107,7 @@ const loginUser = async (req, res) => {
 
         // Validate user input
         if (!(email && password)) {
-            res.send({ result: "All input is required" });
+            res.status(400).json({ result: "All input is required" });
             return; // when sending responses and finishing early, manually return or end the function to stop further processing
         }
         // Validate if user exists in our database
@@ -125,7 +125,7 @@ const loginUser = async (req, res) => {
             // send back logged in user details including token
             res.send({ result: 'User successfully logged in', data: user });
         }
-        else res.send({ result: "Invalid user credentials" });
+        else res.status(400).json({ result: "Invalid user credentials" });
     } catch (err) {
         console.log(err);
         res.send({ result: 500, error: err.message })

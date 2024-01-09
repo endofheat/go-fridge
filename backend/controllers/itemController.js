@@ -46,7 +46,7 @@ const addItem = async (req, res) => {
         const { itemName, quantity, unit, expireDate } = req.body;
         // Validate Item input
         if (!(itemName && quantity && unit && expireDate)) {
-            res.send({ result: "All input is required" }); // code 400, 'Bad Request'
+            res.status(400).json({ result: "All input is required" }); // code 400, 'Bad Request'
             return; // when sending responses and finishing early, manually return or end the function to stop further processing
         }
 
@@ -54,7 +54,7 @@ const addItem = async (req, res) => {
     const oldItem = await Models.Item.findOne({ itemName: { itemName } });
 
     if (oldItem) {
-        res.send({ result: "Item already exists. " }); // code 409, 'Conflict'
+        res.status(409).json({ result: "Item already exists. " }); // code 409, 'Conflict'
         return;
     }
 
@@ -68,28 +68,28 @@ const addItem = async (req, res) => {
     const savedItem = await newItem.save(); // get just the Item fields, no extra sequelize metadata
 
     // return new Item
-    res.send({ result: "Item successfully added", data: savedItem });
+    res.status(201).json({ result: "Item successfully added", data: savedItem });
     } catch (err) {
     console.log(err);
-    res.send({ result: err.message });
+    res.status(500).json({ result: err.message });
     }
 };
 
 const updateItem = (req, res) => {
     Models.Item.findByIdAndUpdate(req.params.id, req.body, {new: true} 
         ).then((data) => {
-        res.send({result: 'Item updated successfully', data: data })
+            res.status(202).json({result: 'Item updated successfully', data: data })
         }).catch(err => {
-        res.send({ result: err.message })
+            res.status(500).json({ result: err.message })
     })
 }
 
 const deleteItem = (req, res) => {
     Models.Item.findByIdAndDelete(req.params.id
     ).then((data) => {
-        res.send({ result: 'Item deleted successfully', data: data })
+        res.status(200).json({ result: 'Item deleted successfully', data: data })
     }).catch(err => {
-        res.send({ result: err.message })
+        res.status(500).json({ result: err.message })
     })
 }
 

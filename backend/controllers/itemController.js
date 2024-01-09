@@ -51,7 +51,7 @@ const addItem = async (req, res) => {
         }
 
     // Validate if Item exists in database
-    const oldItem = await Models.Item.findOne({ itemName: { itemName } });
+    const oldItem = await Models.Item.findOne({ itemName: itemName });
 
     if (oldItem) {
         res.status(409).json({ result: "Item already exists. " }); // code 409, 'Conflict'

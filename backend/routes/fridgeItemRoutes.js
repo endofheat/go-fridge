@@ -4,7 +4,7 @@ let Controllers = require("../controllers/fridgeItemController");
 
 // GET items assigned to the fridgeItem list
 router.get('/item/:id', (req, res) => {
-    Controllers.getAllFridgeItem(req, res);
+    Controllers.getAllFridgeItems(req, res);
 });
 
 // POST add new fridgeItem list

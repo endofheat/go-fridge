@@ -13,10 +13,11 @@ const getFridges = (res) => {
     })
 }
 
+
 const getFridgeItem = (req, res) => {
     // finds all items for a given fridge and populates with details
     Models.Fridge.find({ fridgeItemID: req.params.id })
-    .populate({path:'fridgeItemID'})
+    .populate({path:'fridgeItem'})
     .then((data) => {
         res.send({ result: 200, data: data });
     })

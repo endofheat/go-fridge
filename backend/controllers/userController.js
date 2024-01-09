@@ -136,7 +136,7 @@ const loginUser = async (req, res) => {
 const getUserFridge = (req, res) => {
     // finds fridge for a given user
     Model.User.Find({ fridgeID: req.params.uid })
-    .populate({path: 'fridgeID'})
+    .populate({path: 'fridge'})
     .then((data) => {
         res.send({ result: 200, data: data });
     })

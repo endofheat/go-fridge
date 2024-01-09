@@ -8,13 +8,13 @@ router.get('/', (req, res) => {
 });
 
 // GET items by name
-router.get('/name', (req, res) => {
+router.get('/', (req, res) => {
     Controllers.getItemByName(req, res);
 });
 
 // POST add a new item
-router.post('/', async (req, res) => {
-    await Controllers.addItem(req, res);
+router.post('/create', (req, res) => {
+    Controllers.addItem(req, res);
 });
 
 // PUT update an item

@@ -12,17 +12,17 @@ router.get('/fridgeItem/:id', (req, res) => {
     Controllers.getFridgeItem(req, res);
 });
 
-// POST add a new item
+// POST add a new fridge
 router.post('/create', (req, res) => {
     Controllers.createFridge(req, res);
 });
 
-// PUT update an item
+// PUT update an fridge
 router.put('/:id', (req, res) => {
     Controllers.updateFridge(req, res);
 });
 
-// DELETE delete existed item
+// DELETE delete existed fridge
 router.delete('/:id', (req, res) => {
     Controllers.deleteFridge(req, res);
 });

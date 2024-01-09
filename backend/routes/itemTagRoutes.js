@@ -3,7 +3,11 @@ let router = express.Router();
 let Controllers = require("../controllers/itemTagController");
 
 // GET items assigned to the ItemTag list
-router.get('/item/:id', (req, res) => {
+router.get('/', (req, res) => {
+    Controllers.getAllItemTags(res);
+});
+
+router.get('/:id', (req, res) => {
     Controllers.getAllItemTags(req, res);
 });
 

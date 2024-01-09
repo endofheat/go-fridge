@@ -16,7 +16,7 @@ router.post('/login', (req, res) => {
 
 // POST new user sign up
 router.post('/register', (req, res) => {
-    Controllers.registerUser(req.body, res)
+    Controllers.registerUser(req, res)
 })
 
 // PUT update user info

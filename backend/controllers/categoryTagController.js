@@ -41,10 +41,10 @@ const getTagByName = async (req, res) => {
 
 const addTag = async (req, res) => {
     try {
-        const { tagName, quantity, unit, expireDate } = req.body;
+        const tagName = req;
         // Validate tag input
-        if (!(tagName && quantity && unit && expireDate)) {
-            res.status(400).send({ result: "All input is required" }); // code 400, 'Bad Request'
+        if (!tagName ) {
+            res.status(400).send({ result: "Tag name is required" }); // code 400, 'Bad Request'
             return; // when sending responses and finishing early, manually return or end the function to stop further processing
         }
 
@@ -57,12 +57,7 @@ const addTag = async (req, res) => {
     }
 
     // Create tag in database
-    const newTag = new Models.CategoryTag({
-        tagName,
-        quantity,
-        unit,
-        expireDate,
-    });
+    const newTag = new Models.CategoryTag(req);
     const savedTag = await newTag.save(); // get just the tag fields, no extra sequelize metadata
 
     // return new tag

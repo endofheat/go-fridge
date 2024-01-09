@@ -49,7 +49,7 @@ const addTag = async (req, res) => {
         }
 
     // Validate if tag exists in database
-    const oldTag = await Models.CategoryTag.findOne({ tagName: { tagName } });
+    const oldTag = await Models.CategoryTag.findOne({ tagName: tagName });
 
     if (oldTag) {
         res.status(409).send({ result: "Tag already exists." }); // code 409, 'Conflict'

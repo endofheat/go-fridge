@@ -1,5 +1,4 @@
 'use strict';
-
 let Models = require('../models');
 
 const getTags = (res) => {
@@ -40,8 +39,9 @@ const getTagByName = async (req, res) => {
 
 
 const addTag = async (req, res) => {
+    console.log(req.body);
     try {
-        const tagName = req;
+        const tagName = req.body;
         // Validate tag input
         if (!tagName ) {
             res.status(400).send({ result: "Tag name is required" }); // code 400, 'Bad Request'
@@ -49,7 +49,7 @@ const addTag = async (req, res) => {
         }
 
     // Validate if tag exists in database
-    const oldTag = await Models.CategoryTag.findOne({ tagName: tagName });
+    const oldTag = await Models.CategoryTag.findOne({ tagName: tagName.tagName});
 
     if (oldTag) {
         res.status(409).send({ result: "Tag already exists." }); // code 409, 'Conflict'
@@ -57,7 +57,7 @@ const addTag = async (req, res) => {
     }
 
     // Create tag in database
-    const newTag = new Models.CategoryTag(req);
+    const newTag = new Models.CategoryTag(req.body);
     const savedTag = await newTag.save(); // get just the tag fields, no extra sequelize metadata
 
     // return new tag

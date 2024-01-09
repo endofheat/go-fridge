@@ -40,8 +40,9 @@ const getListByName = async (req, res) => {
 
 
 const addList = async (req, res) => {
+    console.log(req.body);
     try {
-        const listName = req;
+        const listName = req.body;
         // Validate List input
         if (!listName ) {
             res.status(400).send({ result: "Shopping list name is required" }); // code 400, 'Bad Request'
@@ -49,7 +50,7 @@ const addList = async (req, res) => {
         }
 
     // Validate if List exists in database
-    const oldList = await Models.ShoppingList.findOne({ listName: { listName } });
+    const oldList = await Models.ShoppingList.findOne({ listName: listName.listName });
 
     if (oldList) {
         res.status(409).send({ result: "List already exists." }); // code 409, 'Conflict'
@@ -57,7 +58,7 @@ const addList = async (req, res) => {
     }
 
     // Create List in database
-    const newList = new Models.ShoppingList(req);
+    const newList = new Models.ShoppingList(req.body);
     const savedList = await newList.save(); // get just the List fields, no extra sequelize metadata
 
     // return new List

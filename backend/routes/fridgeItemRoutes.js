@@ -1,6 +1,6 @@
 let express = require("express");
 let router = express.Router();
-let Controllers = require("../controllers/fridgeItemItemController");
+let Controllers = require("../controllers/fridgeItemController");
 
 // GET items assigned to the fridgeItem list
 router.get('/item/:id', (req, res) => {

@@ -1,7 +1,6 @@
 "use strict";
 
 let Models = require("../models");
-const { param } = require('../routes/userRoutes');
 const bcrypt = require("bcryptjs");
 const { createToken } = require("../middleware/auth");
 const { Model } = require("mongoose");

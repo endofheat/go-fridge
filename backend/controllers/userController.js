@@ -63,7 +63,7 @@ const registerUser = async (req, res) => {
     // Create user in database
     const newUser = new Models.User({
         userName,
-        email: email.toLowerCase(), // sanitize: convert email to lowercase
+        email,
         password: encryptedPassword,
     });
     const savedUser = await newUser.save(); // get just the user fields, no extra sequelize metadata
@@ -133,7 +133,7 @@ const loginUser = async (req, res) => {
     }
 }
 
-const getUserFridge = (req, res) => {
+/* const getUserFridge = (req, res) => {
     // finds fridge for a given user
     Model.User.Find({ fridgeID: req.params.uid })
     .populate({path: 'fridge'})
@@ -145,7 +145,7 @@ const getUserFridge = (req, res) => {
         console.log(err);
         res.send({ result: 500, data: err.message });
     });
-}
+} */
 
 module.exports = {
     getUsers,
@@ -154,5 +154,5 @@ module.exports = {
     updateUser,
     deleteUser,
     loginUser,
-    getUserFridge,
+    //getUserFridge,
 };

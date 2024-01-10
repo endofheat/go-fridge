@@ -9,6 +9,11 @@ router.get('/', verifyToken, (req, res) => { // uses authentication middleware f
     // if note login, will shows: A token is required for authentication
 })
 
+// GET user by id
+router.put('/:id', (req, res) => {
+    Controllers.getUserByID(req, res)
+})
+
 // POST login user
 router.post('/login', (req, res) => {
     Controllers.loginUser(req, res)

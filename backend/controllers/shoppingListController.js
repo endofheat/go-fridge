@@ -59,7 +59,7 @@ const addList = async (req, res) => {
 
     // Create List in database
     const newList = new Models.ShoppingList(req.body);
-    const savedList = await newList.save(); // get just the List fields, no extra sequelize metadata
+    const savedList = await newList.save(); // get just the List fields
 
     // return new List
     res.send({ result: "List successfully added", data: savedList });

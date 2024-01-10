@@ -13,7 +13,7 @@ router.get('/:id', (req, res) => {
 
 // POST add new ItemTag list
 router.post('/create', (req, res) => {
-    Controllers.createItemTag(req, res);
+    Controllers.createItemTag(req.body, res);
 });
 
 // PUT update ridgeItem list

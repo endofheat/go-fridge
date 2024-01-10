@@ -2,7 +2,7 @@
 let Models = require("../models");
 
 const getFridgeItem = (res) => {
-    // get all items from database
+    // get all fridgeItems
     Models.FridgeItem.find({})
     .then((data) => {
         res.send({result: 200, data: data })
@@ -14,9 +14,9 @@ const getFridgeItem = (res) => {
 }
 
 const getAllFridgeItems = (res) => {
-    // get all items assigned for list
-    Models.FridgeItem.find({ itemID: req.params.id })
-    .populate({path:'item'})
+    // get all items assigned to a user
+    Models.FridgeItem.find({ userID: req.params.id })
+    .populate({path:'user'})
     .then((data) => {
         res.send({ result: 200, data: data });
     })
@@ -39,7 +39,7 @@ const createFridgeItem = (rep, res) => {
 }
 
 const updateFridgeItem = (req, res) => {
-    Models.FridgeItem.findByIdAndUpdate(req.params.id, req.body.id, { new: true })
+    Models.FridgeItem.findByIdAndUpdate(req.params.id, req.body/* .id */, { new: true })
     .then((data) => {
         res.send({ result: 200, data: data });
     })

@@ -5,7 +5,7 @@ const shoppingListSchema = new Schema({
     listName: { type: String, required: true, unique: true },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
-    userID: { type: Schema.Types.ObjectId, ref: "user"},
+    userID: { type: Schema.Types.ObjectId, ref: "user", required: true },
     itemID: { type: Schema.Types.ObjectId, ref: "item" },
 });
 

@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
 });
 
 // GET shopping list by name
-router.get('/', (req, res) => {
+router.get('/:listName', (req, res) => {
     Controllers.getListByName(req, res);
 });
 

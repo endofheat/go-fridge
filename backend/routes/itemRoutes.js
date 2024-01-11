@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
 });
 
 // GET items by name
-router.get('/', (req, res) => {
+router.get('/:itemName', (req, res) => {
     Controllers.getItemByName(req, res);
 });
 

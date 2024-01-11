@@ -7,9 +7,14 @@ router.get('/', (req, res) => {
     Controllers.getFridgeItem(res);
 });
 
-router.get('/:id', (req, res) => {
+/* router.get('/:id', (req, res) => {
     Controllers.getAllFridgeItems(req, res);
-});
+}); */
+
+// GET items assigned to the specific user ID
+router.get('/:userID', (req, res) => {
+    Controllers.getFridgeItemsByUser(req, res);
+})
 
 // POST add new fridgeItem list
 router.post('/create', (req, res) => {

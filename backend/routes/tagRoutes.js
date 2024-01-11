@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
 });
 
 // GET tag by name
-router.get('/', (req, res) => {
+router.get('/:tagName', (req, res) => {
     Controllers.getTagByName(req, res);
 });
 

@@ -7,8 +7,9 @@ router.get('/', (req, res) => {
     Controllers.getItemTags(res);
 });
 
-router.get('/:id', (req, res) => {
-    Controllers.getAllItemTags(req, res);
+// GET items assigned to the specific tag ID
+router.get('/:tagID', (req, res) => {
+    Controllers.getItemByTag(req, res);
 });
 
 // POST add new ItemTag list

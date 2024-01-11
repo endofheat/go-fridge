@@ -10,7 +10,7 @@ router.get('/', verifyToken, (req, res) => { // uses authentication middleware f
 })
 
 // GET user by id
-router.put('/:id', (req, res) => {
+router.get('/:id', (req, res) => {
     Controllers.getUserByID(req, res)
 })
 

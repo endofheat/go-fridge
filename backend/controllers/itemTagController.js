@@ -27,7 +27,7 @@ const getItemByTag = async(req, res) => {
 
         const matchedItem = await Models.ItemTag.find({ tagID: tagID }).lean()
         .populate('itemID', 'itemName -_id')
-        .populate('tagID', 'userName -_id');
+        .populate('tagID', 'tagName -_id');
 
 
         if (!matchedItem) {

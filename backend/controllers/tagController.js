@@ -16,7 +16,7 @@ const getTags = (res) => {
 const getTagByName = async (req, res) => {
     // get tag by tagName, exact match
     try {
-        const tagName = req.query.name;
+        const tagName = req.params.tagName;
 
         if (!tagName) {
             res.status(400).send({ result: "Tag name is required" });

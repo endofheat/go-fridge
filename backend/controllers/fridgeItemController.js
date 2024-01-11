@@ -2,8 +2,10 @@
 let Models = require("../models");
 
 const getFridgeItem = (res) => {
-    // get all fridgeItems
+    // get all fridgeItems with the assigned item name and user name
     Models.FridgeItem.find({})
+    /* .populate('itemID', 'itemName -_id')
+    .populate('userID', 'userName -_id') */
     .then((data) => {
         res.send({result: 200, data: data })
     })
@@ -13,21 +15,35 @@ const getFridgeItem = (res) => {
     })
 }
 
-const getAllFridgeItems = (res) => {
+const getFridgeItemsByUser = async(req, res) => {
     // get all items assigned to a user
-    Models.FridgeItem.find({ userID: req.params.id })
-    .populate({path:'user'})
-    .then((data) => {
-        res.send({ result: 200, data: data });
-    })
-    .catch((err) => {
-    console.log(err);
-        res.send({ result: 500, data: err.message });
-    });
+    try {
+        const userID = req.params.userID;
+        
+        if(!userID) {
+            res.status(400).send({ result: 'User ID is required'});
+            return;
+        }
+
+        const matchedItem = await Models.FridgeItem.find({ userID: userID }).lean()
+        .populate('itemID', 'itemName -_id')
+        .populate('userID', 'userName -_id');
+
+
+        if (!matchedItem) {
+            res.status(204).send({ result: 'No item found with the specified user id'});
+            return;
+        }
+
+        res.status(200).send({ result: "Items successfully retrieved", data: matchedItem });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ result: "Internal Server Error", error: err.message });
+    }
 }
 
 const createFridgeItem = (rep, res) => {
-    new Models.FridgeItem(rep)
+    new Models.FridgeItem(rep.body)
     .save()
     .then((data) => {
         res.send({ result: 200, data: data });
@@ -39,9 +55,9 @@ const createFridgeItem = (rep, res) => {
 }
 
 const updateFridgeItem = (req, res) => {
-    Models.FridgeItem.findByIdAndUpdate(req.params.id, req.body/* .id */, { new: true })
+    Models.FridgeItem.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then((data) => {
-        res.send({ result: 200, data: data });
+        res.status(202).json({ result: 'Fridge item updated successfully', data: data })
     })
     .catch((err) => {
     console.log(err);
@@ -60,9 +76,11 @@ const deleteFridgeItem = (req, res) => {
     });
 }
 
+
 module.exports = {
     getFridgeItem,
-    getAllFridgeItems,
+    // getAllFridgeItems,
+    getFridgeItemsByUser,
     createFridgeItem,
     updateFridgeItem,
     deleteFridgeItem,

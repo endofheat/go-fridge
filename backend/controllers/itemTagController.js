@@ -2,8 +2,10 @@
 let Models = require('../models');
 
 const getItemTags = (res) => {
-    // get all items from database
+    // get all itemTags from database
     Models.ItemTag.find({})
+        /* .populate('itemID', 'itemName -_id')
+    .populate('tagID', 'tagName -_id') */
     .then((data) => {
         res.send({result: 200, data: data })
     })
@@ -13,17 +15,31 @@ const getItemTags = (res) => {
     })
 }
 
-const getAllItemTags = (res) => {
-    // get all items assigned for tag
-    Models.ItemTag.find({ itemID: req.params.id })
-    .populate({path:'item'})
-    .then((data) => {
-        res.send({ result: 200, data: data });
-    })
-    .catch((err) => {
-    console.log(err);
-        res.send({ result: 500, data: err.message });
-    });
+const getItemByTag = async(req, res) => {
+    // get all items assigned to one tag
+    try {
+        const tagID = req.params.tagID;
+        
+        if(!tagID) {
+            res.status(400).send({ result: 'Tag ID is required'});
+            return;
+        }
+
+        const matchedItem = await Models.ItemTag.find({ tagID: tagID }).lean()
+        .populate('itemID', 'itemName -_id')
+        .populate('tagID', 'userName -_id');
+
+
+        if (!matchedItem) {
+            res.status(204).send({ result: 'No item found with the specified tag id'});
+            return;
+        }
+
+        res.status(200).send({ result: "Items successfully retrieved", data: matchedItem });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ result: "Internal Server Error", error: err.message });
+    }
 }
 
 const createItemTag = (rep, res) => {
@@ -39,7 +55,7 @@ const createItemTag = (rep, res) => {
 }
 
 const updateItemTag = (req, res) => {
-    Models.ItemTag.findByIdAndUpdate(req.params.id, req.body.id, { new: true })
+    Models.ItemTag.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then((data) => {
         res.send({ result: 200, data: data });
     })
@@ -62,7 +78,7 @@ const deleteItemTag = (req, res) => {
 
 module.exports = {
     getItemTags,
-    getAllItemTags,
+    getItemByTag,
     createItemTag,
     updateItemTag,
     deleteItemTag,

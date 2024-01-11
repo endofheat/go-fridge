@@ -17,7 +17,7 @@ const getLists = (res) => {
 const getListByName = async (req, res) => {
     // get list by listName, exact match
     try {
-        const listName = req.query.name;
+        const listName = req.params.listName;
 
         if (!listName) {
             res.status(400).send({ result: "Shopping list name is required" });

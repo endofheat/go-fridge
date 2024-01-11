@@ -14,30 +14,43 @@ const getItems = (res) => {
     })
 }
 
-const getItemByName = (req, res) => {
-    // filter items from database by start letter
-    let startLetter = req.query.letter;
-    Models.Item.find({})
-    .then((data) => {
-        let nameMatchedItems = data.filter(
-            item => item.itemName.toUpperCase().starsWith(startLetter.toUpperCase()) // use toUpperCase() to get exact match
-            )
-        res.send({ result: 200, data: nameMatchedItems })
-    })
-    .catch((err) => {
-        console.log(err);
-        res.send({result: 204, data: err.message }); // code 204, 'No Content'
-    })
-}
+const getItemByName = async (req, res) => {
+    // get item by itemName, exact match
+    try {
+        const itemName = req.params.itemName;
 
-// const getItemByTag = (req, res) => {
-//     let tagName = req.query.text;
+        if (!itemName) {
+            res.status(400).send({ result: "Item name is required" });
+            return;
+        }
+
+        const matchedItem = await Models.Item.findOne({ itemName: itemName }).lean();
+
+        if (!matchedItem) {
+            res.status(204).send({ result: "No Item found with the specified name" });
+            return;
+        }
+
+        res.status(200).send({ result: "Item successfully retrieved", data: matchedItem });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ result: "Internal Server Error", error: err.message });
+    }
+};
+
+// const getItemByName = (req, res) => {
+//     // filter items from database by start letter
+//     let startLetter = req.query.letter;
 //     Models.Item.find({})
 //     .then((data) => {
-//         let tagMatchedItems = data.data.filter(
-
+//         let nameMatchedItems = data.filter(
+//             item => item.itemName.toUpperCase().starsWith(startLetter.toUpperCase()) // use toUpperCase() to get exact match
 //             )
-//         res.send({ result: 200, data: tagMatchedItems })
+//         res.send({ result: 200, data: nameMatchedItems })
+//     })
+//     .catch((err) => {
+//         console.log(err);
+//         res.send({result: 204, data: err.message }); // code 204, 'No Content'
 //     })
 // }
 
@@ -96,7 +109,7 @@ const deleteItem = (req, res) => {
 module.exports = {
     getItems,
     getItemByName,
-    // getItemByTag,
+    // getItemByItem,
     addItem,
     updateItem,
     deleteItem,

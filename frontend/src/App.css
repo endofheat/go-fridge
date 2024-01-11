@@ -1,9 +1,16 @@
 #root {
-  max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
 }
+
+.App {
+  padding-bottom: 60px;
+}
+
+body {
+  min-height: 100vh;
+}
+
 
 .logo {
   height: 6em;
@@ -16,6 +23,17 @@
 }
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+#BottomNavigationAction {
+  color: "##1e6b7e";
+}
+
+.Footer {
+position:relative;
+bottom:0;
+display:block;  
+width:100%;
 }
 
 @keyframes logo-spin {

@@ -8,9 +8,8 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import Paper from '@mui/material/Paper';
 
-
     export default function FixedBottomNavigation() {
-    const [value, setValue] = React.useState(1);
+    const [value, setValue] = React.useState(0);
     const ref = React.useRef(null);
 
 

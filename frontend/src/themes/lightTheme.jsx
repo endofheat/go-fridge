@@ -7,6 +7,10 @@ export const lightThemeSettings = {
       main: '#ffffff',
       light: '#dcf3ff',
       dark: '#94a8b2',
+/*       main: '#134243',
+      light: '#252354',
+      dark: '#3234ff', */
+      contrastText: '#999999'
     },
     secondary: {
       main: '#8de2f1',

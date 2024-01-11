@@ -1,17 +1,21 @@
 // SearchBar.js
 
 import React, { useState } from 'react';
-import { InputBase, IconButton, AppBar, Toolbar } from '@mui/material';
-import { styled} from "@mui/material/styles";
+import { InputBase, IconButton, AppBar, Toolbar, Icon, Box } from '@mui/material';
+import { styled, alpha } from "@mui/material/styles";
 import SearchIcon from '@mui/icons-material/Search';
 
 const SearchBar = ({ onSearch }) => {
 const [searchTerm, setSearchTerm] = useState('');
 
-const handleSearch = async() => {
+const handleSearch = async(e) => {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    const search = data.get("search")
+    console.log(search);
     try {
         // use RESTful API and the endpoint from backend
-        const response = await fetch(`/api/tag/${searchTerm}`, {
+        const response = await fetch(`http://localhost:8888/api/tag/${searchTerm}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -23,13 +27,29 @@ const handleSearch = async() => {
             }
         
             const searchResult = await response.json();
-        
+            console.log(searchResult);
             onSearch(searchResult);
+            
             } catch (error) {
             console.error('Error during search:', error);
             }
     }
 
+const Search = styled("div")(({ theme }) => ({
+    position: "relative",
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: alpha(theme.palette.common.white, 0.15),
+    "&:hover": {
+        backgroundColor: alpha(theme.palette.common.white, 0.25),
+    },
+    marginRight: theme.spacing(2),
+    marginLeft: 0,
+    width: "100%",
+    [theme.breakpoints.up("sm")]: {
+        marginLeft: theme.spacing(3),
+        width: "auto",
+    },
+    }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
     color: "inherit",
@@ -58,20 +78,18 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
 
 return (
     <div>
-    <IconButton onClick={handleSearch}>
-        <SearchIcon />
-    </IconButton>
-    <SearchBar>
-        <SearchIconWrapper>
-            <SearchIcon />
-        </SearchIconWrapper>
+        <Box onSubmit={handleSearch} component="form">
+    <Search>
+            <IconButton type="submit" onClick={handleSearch}><SearchIcon/></IconButton>
     <StyledInputBase
         placeholder="Search tag..."
-        inputProps={{ "aria-label": "search tag" }}
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        inputProps={{ "aria-label": "search" }}
+        // value={searchTerm}
+        // onChange={(e) => setSearchTerm(e.target.value)}
+        name='search'
     />
-    </SearchBar>
+    </Search>
+    </Box>
     </div>
 );
 };

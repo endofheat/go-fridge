@@ -18,6 +18,7 @@ import Tooltip from "@mui/material/Tooltip";
 import { NavLink } from "react-router-dom";
 import ThemeSwitcher from "./ThemeSwitch";
 import logo from '../assets/logo.png';
+import SearchBar from "./SearchBar";
 
 const pages = [
   {
@@ -62,7 +63,7 @@ const NavigationButton = ({ to, children, onClick, ...props }) => (
   </NavLink>
 );
 
-const Search = styled("div")(({ theme }) => ({
+/* const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.white, 0.15),
@@ -100,7 +101,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
       width: "20ch",
     },
   },
-}));
+})); */
 
 export default function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -175,18 +176,17 @@ export default function ResponsiveAppBar() {
               </NavigationButton>
             ))}
           </Box>
-          <Search>
-            <SearchIconWrapper>
+          <SearchBar /* onSearch={} */>
+          {/* <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-              /* type="text"
+              type="text"
               value={searchTerm} 
-              onChange={handleSearch} */
+              onChange={handleSearch}
               placeholder="Search..."
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>
+              inputProps={{ "aria-label": "search" }}/>  */}
+          </SearchBar>
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">

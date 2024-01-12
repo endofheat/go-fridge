@@ -9,7 +9,7 @@ export default function GetTag(props) {
   useEffect(() => {
     axios.get(`http://localhost:8888/api/tag`)
     .then(response => setTagID(response.data.data))
-  })
+  },[])
 
   const userOptions = tagID.map((user) => ({
     label: user.id.toString(), // Convert the ID to a string

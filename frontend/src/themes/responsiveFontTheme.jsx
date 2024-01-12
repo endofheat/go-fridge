@@ -31,10 +31,22 @@ ResponsiveFont.typography.p = {
             fontSize: '1rem',
         },
     [ResponsiveFont.breakpoints.up('xs')]: {
-        fontSize: 'rem',
+        fontSize: '0.8rem',
         },
     [ResponsiveFont.breakpoints.up('md')]: {
         fontSize: '1rem',
         },
 };
 
+ResponsiveFont.typography.footer = {
+    fontSize: '0.8rem',
+        '@media (min-width:600px)': {
+            fontSize: '0.8rem',
+        },
+    [ResponsiveFont.breakpoints.up('xs')]: {
+        fontSize: '0.4rem',
+        },
+    [ResponsiveFont.breakpoints.up('md')]: {
+        fontSize: '0.6rem',
+        },
+};

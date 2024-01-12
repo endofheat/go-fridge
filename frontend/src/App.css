@@ -11,6 +11,11 @@ body {
   min-height: 100vh;
 }
 
+.Footer {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+}
 
 .logo {
   height: 6em;

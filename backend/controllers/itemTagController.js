@@ -26,7 +26,7 @@ const getItemByTag = async(req, res) => {
         }
 
         const matchedItem = await Models.ItemTag.find({ tagID: tagID }).lean()
-        .populate('itemID', 'itemName -_id')
+        .populate('itemID', 'itemName')
         .populate('tagID', 'tagName -_id');
 
 

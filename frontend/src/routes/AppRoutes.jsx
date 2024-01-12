@@ -3,11 +3,13 @@ import Homepage from "../pages/Homepage";
 import DashboardPage, { DashboardMessages, DashboardTasks} from "../pages/DashboardPage";
 import AboutPage from "../pages/AboutPage";
 import PageNotFound from "../pages/PageNotFound";
-import SignupPage from "../pages/SignupPage.jsx";
 import ProtectedRoute from "./ProtectedRoute";
 import Profile from "../pages/Profile.jsx";
 import LoginForm from "../components/LoginFormMUI.jsx";
+import SignupForm from "../components/SignupMUI.jsx";
 import LogoutPage from "../pages/LogoutPage.jsx";
+import SearchResultPage from "../pages/SearchResultPage.jsx";
+import AddItem from "../components/AddItem.jsx";
 
 // child components using {...props}
 function AppRoutes(props) {
@@ -33,7 +35,9 @@ function AppRoutes(props) {
                 </ProtectedRoute>} />
 
         <Route path="/about" element={<AboutPage {...props} />} />
-        <Route path="/signup" element={<SignupPage {...props} />} />
+        <Route path="/fridge" element={<SearchResultPage {...props} />} />
+        <Route path="/additem" element={<AddItem {...props} />} />
+        <Route path="/signup" element={<SignupForm {...props} />} />
         <Route path="/logout" element={
               <ProtectedRoute>
                 <LogoutPage {...props} />

@@ -1,18 +1,20 @@
 // SearchBar.js
 
-import React, { useState } from 'react';
-import { InputBase, IconButton, AppBar, Toolbar, Icon, Box } from '@mui/material';
+import React, { useRef, useState } from 'react';
+import { InputBase, IconButton, AppBar, Toolbar, Icon, Box, TextField } from '@mui/material';
 import { styled, alpha } from "@mui/material/styles";
 import SearchIcon from '@mui/icons-material/Search';
 
 const SearchBar = ({ onSearch }) => {
 const [searchTerm, setSearchTerm] = useState('');
+const [key, setKey] = useState(0);
+const inputRef = useRef(null);
 
 const handleSearch = async(e) => {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    const search = data.get("search")
-    console.log(search);
+    const data = new FormData(e.target);
+    // const search = data.get("search")
+    console.log(data);
     try {
         // use RESTful API and the endpoint from backend
         const response = await fetch(`http://localhost:8888/api/tag/${searchTerm}`, {
@@ -33,6 +35,14 @@ const handleSearch = async(e) => {
             } catch (error) {
             console.error('Error during search:', error);
             }
+    }
+    const handleInputChange = (e) => {
+        setSearchTerm(e.target.value)
+        
+    }
+
+    const handleTextField = (e) => {
+        inputRef.current.focus()
     }
 
 const Search = styled("div")(({ theme }) => ({
@@ -78,18 +88,27 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
 
 return (
     <div>
-        <Box onSubmit={handleSearch} component="form">
+        {/* <form> */}
     <Search>
-            <IconButton type="submit" onClick={handleSearch}><SearchIcon/></IconButton>
-    <StyledInputBase
+            <IconButton onClick={handleSearch}><SearchIcon/></IconButton>
+    {/* <StyledInputBase
         placeholder="Search tag..."
         inputProps={{ "aria-label": "search" }}
         // value={searchTerm}
         // onChange={(e) => setSearchTerm(e.target.value)}
         name='search'
-    />
+    /> */}
+    <TextField 
+        placeholder="Search tag..."
+        key={key}
+        inputProps={{ "aria-label": "search" }}
+        value={searchTerm}
+        onChange={handleInputChange}
+        onFocus={handleTextField}
+        inputRef={inputRef}
+        name='search'/>
     </Search>
-    </Box>
+    {/* </form> */}
     </div>
 );
 };

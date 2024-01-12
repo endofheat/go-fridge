@@ -4,8 +4,9 @@ import ResponsiveAppBar from './components/NavbarMUI';
 import MyThemeProvider from './context/MyThemeContext';
 import AppRoutes from './routes/AppRoutes';
 import Footer from './components/Footer';
-import BottomNavigation from './components/BottomNavMUI';
 import { CssBaseline } from '@mui/material';
+import { SearchProvider } from './context/SearchContext';
+import BackToTop from './components/BackToTop';
 
 function App() {
 
@@ -14,11 +15,13 @@ function App() {
     <>
     <MyThemeProvider>
       <UserProvider>
+        <SearchProvider>
           <ResponsiveAppBar />
           <CssBaseline />
           <AppRoutes />
+          <BackToTop />
           <Footer />
-          <BottomNavigation />
+        </SearchProvider>
       </UserProvider>
       </MyThemeProvider>
     </>

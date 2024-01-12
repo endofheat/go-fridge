@@ -21,7 +21,20 @@ ResponsiveFont.typography.h3 = {
         fontSize: '1.2rem',
         },
     [ResponsiveFont.breakpoints.up('md')]: {
-        fontSize: '2.4rem',
+        fontSize: '1rem',
+        },
+};
+
+ResponsiveFont.typography.p = {
+    fontSize: '0.8rem',
+        '@media (min-width:600px)': {
+            fontSize: '1rem',
+        },
+    [ResponsiveFont.breakpoints.up('xs')]: {
+        fontSize: 'rem',
+        },
+    [ResponsiveFont.breakpoints.up('md')]: {
+        fontSize: '1rem',
         },
 };
 

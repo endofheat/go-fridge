@@ -16,6 +16,7 @@ export default function Homepage() {
         <Typography variant="p">
           Sounds pretty cool, but apparently it's not that good.. not yet, but will be awesome in future / after I become an experienced software engineer. YAY 
         </Typography>
+        <p></p>
         <img src = {fridge} width = "50%" height = "50%" alt = 'A opened fridge. '/>
       </ThemeProvider>
     </div>

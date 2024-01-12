@@ -15,6 +15,7 @@ body {
   width: 100%;
   position: fixed;
   bottom: 0;
+  color: gray;
 }
 
 .logo {
@@ -32,13 +33,6 @@ body {
 
 #BottomNavigationAction {
   color: "##1e6b7e";
-}
-
-.Footer {
-position:relative;
-bottom:0;
-display:block;  
-width:100%;
 }
 
 @keyframes logo-spin {
